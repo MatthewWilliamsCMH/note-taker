@@ -1,15 +1,16 @@
-const nt = require("express").Router();
-// const { v4: uuidv4 } = require('uuid');
+const notes = require("express").Router();
+const uuid = require("../helpers/uuid");
 const { readAndAppend, readFromFile } = require("../helpers/fsUtils");
 
-// GET Route for retrieving all the feedback
-nt.get("/", (req, res) =>
+// GET Route for retrieving all the notes
+notes.get("/", (req, res) =>
   readFromFile("./db/db.json").then((data) => res.json(JSON.parse(data)))
 );
 
-// POST Route for submitting note
-nt.post("/", (req, res) => {
-  // Destructuring assignment for the items in req.body
+// POST Route for submitting a note
+notes.post("/", (req, res) => {
+  // Destructuring assignment for the items in req.body (to clarify, the request includes 
+  //the body [which includes the data from the form] and assigns it to variables "title" and "text")
   const { title, text } = req.body;
 
   // If all the required properties are present
@@ -18,10 +19,10 @@ nt.post("/", (req, res) => {
     const newNote = {
       title,
       text,
-      // id: uuidv4()
+      id: uuid()
     };
 
-    readAndAppend(newNote, "./db/db.json");  //should this be ../db/db.json?
+    readAndAppend(newNote, "./db/db.json");
 
     const response = {
       status: "success",
@@ -34,4 +35,4 @@ nt.post("/", (req, res) => {
   }
 });
 
-module.exports = nt;
+module.exports = notes;
