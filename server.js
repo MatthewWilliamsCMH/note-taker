@@ -3,29 +3,30 @@ const path = require("path");
 const fs = require("fs/promises");
 const api = require("./routes/index.js");
 
-const PORT = process.env.PORT || 3002; //this opens port 3001 and ...
+const PORT = process.env.PORT || 3001; //this opens port 3001 and ...
 const app = express(); //this assigns "app" to express
 
-//middleware
-app.use(express.json()); //processing json files
-app.use(express.urlencoded({ extended: true })); //handling urls
+//middleware I'm not sure I get why this is middleware. Is it because the app.use("/api", api) statement "opens" the "virtual folder" called api, 
+//the routes to which are stored in another module (i.e. notest.js)? Why are .json and .urlencoded middleware? because they're functions (albeit
+//functions that are built in to express) that perform some function on data before it is returned to the client?
+app.use(express.json()); //massages json files into a form that express can use
+app.use(express.urlencoded({ extended: true })); //encodes urls so express can read them (replaces spaces, extended chars, etc. with unicode vals.)
 app.use("/api", api); //sets up a router to handle requests that being with "api" (which you can see are called in /public/assets/js/index.js)
-app.use(express.static("public")); //tell app where to look for files not in the root directory
+app.use(express.static("public")); //tells "app" where to look for files not in the root directory; it's a kind of failsafe
 
-//get route for home page
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "/public/index.html"));
-});
-
-//get route for notes file
+//GET route for notes.html file
+//SERVER: "I just got a request for '/public/notes.html'. Join my root path to that file's path, get the file, and send its contents 
+//back to the client."
 app.get("/notes", (req, res) => { //return notes.html file
   res.sendFile(path.join(__dirname, "/public/notes.html"));
 });
 
-//in this context, ".api" is addresses a router object, not an actual folder on my hard drive
-//think of it as a "watched" folder that executes some function when something gets dropped into it
+//In this context, ".api" addresses a router object (the notes.js file inside routes), not an actual folder on my hard drive. Think of it as
+//a "watched" folder that executes one or more functions when data gets dropped into it.
+//SERVER: "I just got a request for '/api/notes.' That's not a real folder, it's a file with functions to execute. From that file, execute the
+//readFromFile function, process it, and return the data to the client."
 app.get("/api/notes", (req, res) => { //return db.json file
-  readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)))
+  readFromFile("./db/db.json").then((data) => res.json(JSON.parse(data)));
 });
 
 // //optional
@@ -33,10 +34,11 @@ app.get("/api/notes", (req, res) => { //return db.json file
 // //   res.delete
 // // };
 
-app.get("*", (req, res) => { //return index.html file
+//SERVER: "Hey. I just got a request for a file that I can't find. Let's just send the client the homepage at index.html."
+app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/public/index.html"));
 });
 
 app.listen(PORT, () => { 
-  console.log(`App listening on port ${PORT}`)
+  console.log(`App listening on port ${PORT}`);
 })
