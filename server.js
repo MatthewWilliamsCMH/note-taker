@@ -21,19 +21,6 @@ app.get("/notes", (req, res) => { //return notes.html file
   res.sendFile(path.join(__dirname, "/public/notes.html"));
 });
 
-//In this context, ".api" addresses a router object (the notes.js file inside routes), not an actual folder on my hard drive. Think of it as
-//a "watched" folder that executes one or more functions when data gets dropped into it.
-//SERVER: "I just got a request for '/api/notes.' That's not a real folder, it's a file with functions to execute. From that file, execute the
-//readFromFile function, process it, and return the data to the client."
-app.get("/api/notes", (req, res) => { //return db.json file
-  readFromFile("./db/db.json").then((data) => res.json(JSON.parse(data)));
-});
-
-// //optional
-// //app.delete("./api/notes/:id"), (req, res) => { //optional to delete note from the db and the note iteself
-// //   res.delete
-// // };
-
 //SERVER: "Hey. I just got a request for a file that I can't find. Let's just send the client the homepage at index.html."
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/public/index.html"));
