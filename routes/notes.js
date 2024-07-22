@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const uuid = require("../helpers/uuid");
-const { readAndAppend, readFromFile } = require("../helpers/fsUtils");
+const { readAndAppend, readFromFile, writeToFile } = require("../helpers/fsUtils");
 
 // GET Route for retrieving all the notes
 //The slash is just the terminator for the path that's been built by the earlier calls
@@ -36,9 +36,9 @@ router.post("/", (req, res) => {
 //optional
 // router.delete("/:id", (req, res) => {
 //   const {id} = req.params;
+
 //   const data = readFromFile("./db/db.json");
 //   const notes = JSON.parse(data);
-//   console.log(notes)
   
 //   const filteredNotes = notes.filter(note => note.id !== id);
 //   writeToFile("./db/db.json", filteredNotes);
