@@ -35,7 +35,7 @@ router.post("/", (req, res) => {
 
 //optional
 // router.delete("/:id", (req, res) => {
-//   const {id} = req.params;
+//   const id = req.params["id"];
 
 //   const data = readFromFile("./db/db.json");
 //   const notes = JSON.parse(data);
