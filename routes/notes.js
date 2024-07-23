@@ -34,15 +34,17 @@ router.post("/", (req, res) => {
 });
 
 //optional
-// router.delete("/:id", (req, res) => {
-//   const id = req.params["id"];
+router.delete("/:id", (req, res) => {
+  const id = req.params["id"];
 
-//   const data = readFromFile("./db/db.json");
-//   const notes = JSON.parse(data);
+  readFromFile("./db/db.json").then((data) => {
+    const notes = JSON.parse(data);
   
-//   const filteredNotes = notes.filter(note => note.id !== id);
-//   writeToFile("./db/db.json", filteredNotes);
-//   res.json(filteredNotes);
-// });
+    const filteredNotes = notes.filter(note => note.id !== id);
+    writeToFile("./db/db.json", filteredNotes);
+    res.json(filteredNotes);
+  
+  });
+});
 
 module.exports = router;

@@ -33,10 +33,5 @@
         "title": "Ask John for help",
         "text": "Why isn't my handler correctly interpreting the id that's being passed to it?\n",
         "id": "2766"
-    },
-    {
-        "title": "Ask Slavic for help",
-        "text": "The delete request is almost there, but it's throwing an internal system error.",
-        "id": "2a13"
     }
 ]
